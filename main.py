@@ -3,27 +3,7 @@ import boto3
 import psycopg2
 
 # AWS credentials
-AWS_ACCESS_KEY_ID = 'AKIA47CR2RFZRWOMIIGO'
-AWS_SECRET_ACCESS_KEY = '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'
-S3_BUCKET_NAME = 'image-testing-pipeline'
 
-# Database connection
-DB_HOST = 'localhost'
-DB_NAME = 'payload'
-DB_USER = 'postgres'
-DB_PASSWORD = 'root'
-
-# Function to upload image to S3 bucket
-def upload_to_s3(file):
-    s3 = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID,
-                      aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
-
-    try:
-        s3.upload_fileobj(file, S3_BUCKET_NAME, file.name)
-        return True
-    except Exception as e:
-        st.error(f"Error uploading file: {e}")
-        return False
 
 # Function to insert data into PostgreSQL database
 def insert_into_db(file_url , attachment_type , visual_classification, nutrition_extraction,bodypart_analysis,text_classification ,text_extraction, labreport_extraction,output,history):
