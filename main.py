@@ -2,8 +2,17 @@ import streamlit as st
 import boto3
 import psycopg2
 
-# AWS credentials
 
+def upload_to_s3(file):
+    s3 = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID,
+                      aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+
+    try:
+        s3.upload_fileobj(file, S3_BUCKET_NAME, file.name)
+        return True
+    except Exception as e:
+        st.error(f"Error uploading file: {e}")
+        return False
 
 # Function to insert data into PostgreSQL database
 def insert_into_db(file_url , attachment_type , visual_classification, nutrition_extraction,bodypart_analysis,text_classification ,text_extraction, labreport_extraction,output,history):
@@ -89,7 +98,7 @@ def main():
 
                 # Button to submit data
                 if st.button("Submit"):
-                    file_url = f"https://{S3_BUCKET_NAME}.s3.amazonaws.com/{uploaded_file.name}"
+                    file_url = f"https://.s3.amazonaws.com/{uploaded_file.name}"
 
                     if upload_to_s3(uploaded_file) and insert_into_db( file_url , attachment_type , visual_classification, nutrition_extraction,bodypart_analysis,text_classification ,text_extraction, labreport_extraction,output,history):
                         st.success("Data inserted successfully!")
